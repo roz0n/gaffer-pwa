@@ -37,8 +37,8 @@ const Header = ({
           onChange={handleCountryChange}
         >
           {countries.map((country, i) => (
-            <option key={`country-${i}`} value={country.toLowerCase()}>
-              {country}
+            <option key={`country-${i}`} value={country.name}>
+              {country.name}
             </option>
           ))}
         </select>{" "}

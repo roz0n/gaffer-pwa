@@ -8,7 +8,7 @@ function Routes() {
   return (
     <Switch>
       <Route path="/" exact component={WorldView} />
-      <Route path="/match" component={MatchView} />
+      <Route path="/matches" component={MatchView} />
     </Switch>
   );
 }

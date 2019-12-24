@@ -19,7 +19,7 @@ import {
 
 function Match(props) {
   const location = props.location?.pathname;
-  const [country, setCountry] = useState(COUNTRIES[DEFAULT_COUNTRY]);
+  const [country, setCountry] = useState(COUNTRIES[DEFAULT_COUNTRY]["name"]);
   const [leagues, setLeagues] = useState(null);
   const [matches, setMatches] = useState(null);
   const [standings, setStandings] = useState(null);

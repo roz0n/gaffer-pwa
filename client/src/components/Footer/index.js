@@ -3,7 +3,7 @@ import React from "react";
 const Footer = () => {
   return (
     <footer style={style.container}>
-        <span>data by football-data.org</span>
+        <span>Football data provided by the Football-Data.org API</span>
         <span>github.com/roz0n</span>
     </footer>
   );
