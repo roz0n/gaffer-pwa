@@ -69,6 +69,21 @@ const MapChart = ({ style }) => {
 let World = () => {
   return (
     <div style={styles.layout}>
+      <article
+        style={{
+          color: "white",
+          position: "absolute",
+          fontSize: "2rem",
+          userSelect: "none",
+          maxWidth: "100vw",
+          width: "100vw",
+          textAlign: "center",
+          top: "2.5rem",
+          letterSpacing: ".5rem"
+        }}
+      >
+        <h1>GAFFER</h1>
+      </article>
       <MapChart style={{ height: "100%", width: "100%" }} />
     </div>
   );
@@ -76,6 +91,7 @@ let World = () => {
 
 const styles = {
   layout: {
+    position: "relative",
     height: "100vh",
     width: "100vw",
     backgroundColor: "black",
@@ -84,7 +100,9 @@ const styles = {
 };
 
 const countryStyles = {
-  default: {},
+  default: {
+    zIndex: "999999"
+  },
   hover: {
     fill: "red"
   },
