@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Radium from "radium";
 import { Link } from "react-router-dom";
+import ReactTooltip from "react-tooltip";
 import {
   ComposableMap,
   Geographies,
@@ -19,9 +20,20 @@ const countriesList = [
 const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
 
-const MapChart = ({ style }) => {
+const rounded = num => {
+  if (num > 1000000000) {
+    return Math.round(num / 100000000) / 10 + "Bn";
+  } else if (num > 1000000) {
+    return Math.round(num / 100000) / 10 + "M";
+  } else {
+    return Math.round(num / 100) / 10 + "K";
+  }
+};
+
+const MapChart = ({ setTooltipContent, style }) => {
   return (
     <ComposableMap
+      data-tip=""
       style={style}
       preserveAspectRatio={true}
       projection="geoAzimuthalEqualArea"
@@ -45,6 +57,13 @@ const MapChart = ({ style }) => {
                     geography={geo}
                     fill="#9998A3"
                     style={countryStyles}
+                    onMouseEnter={() => {
+                      const { POP_EST } = geo.properties;
+                      setTooltipContent(`${geoName} — ${rounded(POP_EST)}`);
+                    }}
+                    onMouseLeave={() => {
+                      setTooltipContent("");
+                    }}
                   />
                 </Link>
               );
@@ -65,7 +84,9 @@ const MapChart = ({ style }) => {
   );
 };
 
-let World = () => {
+const World = Radium(() => {
+  const [content, setContent] = useState("");
+
   return (
     <div style={styles.layout}>
       <article
@@ -83,10 +104,17 @@ let World = () => {
       >
         <h1>GAFFER</h1>
       </article>
-      <MapChart style={{ height: "100%", width: "100%" }} />
+
+      <MapChart
+        setTooltipContent={setContent}
+        style={{ height: "100%", width: "100%" }}
+      />
+      <ReactTooltip>
+        {content}
+      </ReactTooltip>
     </div>
   );
-};
+});
 
 const styles = {
   layout: {
@@ -108,5 +136,4 @@ const countryStyles = {
   pressed: {}
 };
 
-World = Radium(World);
 export { World as WorldView };
