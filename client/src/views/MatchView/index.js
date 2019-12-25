@@ -24,7 +24,7 @@ function Match(props) {
   const { country: countryParam } = params;
   const countryData = COUNTRIES[countryParam];
   // TODO: This can be named better
-  const [settingsView, setSettingsView] = useState(false);
+  const [settingsViewActive, setsettingsViewActive] = useState(false);
 
   // Semi-persistent data
   const [country, setCountry] = useState(null);
@@ -49,7 +49,7 @@ function Match(props) {
   }
 
   function toggleSettingsView() {
-    setSettingsView(!settingsView);
+    setsettingsViewActive(!settingsViewActive);
   }
 
   // Handle initial load and routing
@@ -121,18 +121,19 @@ function Match(props) {
         countries={Object.values(COUNTRIES)}
         country={country}
         setCountry={setCountry}
+        settingsViewActive={settingsViewActive}
         handleSettingsView={toggleSettingsView}
         handleReset={handleReset}
         loading={loading}
       />
 
       <div style={{ width: "100%", display: "flex", flexDirection: "row" }}>
-        {standings && !settingsView && (
+        {standings && !settingsViewActive && (
           <Standings standings={standings} handleClick={setActiveClubId} />
         )}
 
         <div style={style.body}>
-          {league && !loading && !settingsView && (
+          {league && !loading && !settingsViewActive && (
             <section style={{ height: "100%" }}>
               <div style={{ height: "inherit" }}>
                 <Analytics
@@ -146,7 +147,7 @@ function Match(props) {
             </section>
           )}
 
-          {settingsView && <SettingsView />}
+          {settingsViewActive && <SettingsView />}
 
           {loading && <EmptyContent message={"Preparing tactics..."} />}
 

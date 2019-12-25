@@ -59,7 +59,7 @@ function Analytics({
         </article>
       ) : (
         <article style={style.content}>
-          Select a club to view more information it
+          Pick a squad from the left menu
         </article>
       )}
     </>
