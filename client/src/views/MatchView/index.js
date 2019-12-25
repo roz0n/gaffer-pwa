@@ -39,7 +39,10 @@ function Match(props) {
   const [error, setError] = useState(false);
 
   function handleReset() {
+    setCountry(null);
+    setLeague(null);
     setStandings(null);
+    setMatches(null);
     setActiveClubId(null);
     setError(false);
   }
@@ -64,7 +67,6 @@ function Match(props) {
         const leagueData = await fetchLeaguesByCountry(country);
 
         if (leagueData.success) {
-          console.log("SENDING THIS AS PAYLOAD", leagueData)
           yield { payload: leagueData, handleState: setLeague };
         } else {
           throw new Error("Error fetching league data");
@@ -99,8 +101,6 @@ function Match(props) {
         const { payload, handleState } = request;
         const { data } = payload;
 
-        console.log("SETTING STATE", payload);
-
         handleState(data);
       }
     }
@@ -109,8 +109,6 @@ function Match(props) {
       loadData();
     }
   }, [country, matches]);
-
-  console.log("LEAGUE", league);
 
   return (
     <Layout>

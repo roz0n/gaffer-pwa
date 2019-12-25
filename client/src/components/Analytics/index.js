@@ -6,15 +6,18 @@ import MatchdayCarousel from "../MatchdayCarousel";
 // Utils
 import COUNTRIES from "../../constants/countries";
 
-function Analytics({ country, standings, allMatches, leagueData = [], activeClubId }) {
+function Analytics({
+  country,
+  standings,
+  allMatches,
+  leagueData,
+  activeClubId
+}) {
   // TODO: Get rid of these damn loops
-  const activeLeague = leagueData.find(league => league.id === COUNTRIES[country].leagueId);
-  const { currentSeason } = activeLeague;
-  const { currentMatchday } = currentSeason;
-
-  console.log("LEAGUE DATA ANA", leagueData);
-  console.log("targetLeague",  activeLeague)
-  // console.log("CURRENT MATCHDAY", leagueData, currentMatchday);
+  const activeLeague = leagueData.find(
+    league => league.id === COUNTRIES[country].leagueId
+  );
+  const season = activeLeague?.currentSeason;
 
   const tabs = [
     {
@@ -35,7 +38,7 @@ function Analytics({ country, standings, allMatches, leagueData = [], activeClub
   ];
   return (
     <>
-      {activeClubId ? (
+      {activeClubId && season ? (
         <article style={style.container}>
           <div style={[style.gridItem, style.content]}>
             <span style={{ borderBottom: "1px solid red" }}>
@@ -44,7 +47,7 @@ function Analytics({ country, standings, allMatches, leagueData = [], activeClub
                 allMatches={allMatches}
                 activeClubId={activeClubId}
                 activeLeagueName={activeLeague.name}
-                currentMatchday={currentMatchday}
+                currentMatchday={season.currentMatchday}
               />
             </span>
             <Tabs tabs={tabs} activeTab={1} />

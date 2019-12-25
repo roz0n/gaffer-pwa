@@ -21,6 +21,7 @@ const Header = ({
       search: `?country=${countryName}`
     });
 
+    handleReset();
     setCountry(e.target.value);
   }
 

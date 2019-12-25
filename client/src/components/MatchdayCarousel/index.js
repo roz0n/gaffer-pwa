@@ -12,6 +12,7 @@ const PREV = "PREV";
 const NEXT = "NEXT";
 const RESET = "RESET";
 
+// TODO: This component is full of iteration and needs a ton of work
 const MatchdayCarousel = ({
   standings,
   allMatches,
@@ -19,26 +20,31 @@ const MatchdayCarousel = ({
   activeClubId,
   currentMatchday = ""
 }) => {
-  
   const [activeMatchday, setActiveMatchday] = useState();
-  const clubMatches = allMatches.filter(
+  const activeClubMatches = allMatches.filter(
     match =>
       match.homeTeam.id === activeClubId || match.awayTeam.id === activeClubId
   );
 
-  console.log("MATCHES ***", clubMatches);
-
   // TODO: Do we need this loop here as well?
-  const recentMatchData = clubMatches?.filter(match => {
-    console.log("** MATCH **", match, activeMatchday, currentMatchday);
-    const matchdayToReference = +activeMatchday || +currentMatchday;
-    return match.matchday === +matchdayToReference;
+  const matchdayMatch = activeClubMatches.find(match => {
+    const matchdayToReference = activeMatchday || currentMatchday;
+    return match.matchday === matchdayToReference;
   });
 
-  console.log("recentMatchData ***", recentMatchData);
+  // TODO: Standings should be a map called teams?
+  // Standings just needs more data processing (set position property, and create separate clubs map)
+  // Then we won't need to loop here
+  const homeTeamData = standings.find(
+    team => team.id === matchdayMatch.homeTeam?.id
+  );
+
+  const awayTeamData = standings.find(
+    team => team.id === matchdayMatch.awayTeam?.id
+  );
 
   function handleActiveMatchday(e, type) {
-    const matchdayToReference = +activeMatchday || +currentMatchday;
+    const matchdayToReference = activeMatchday || currentMatchday;
 
     switch (type) {
       case NEXT:
@@ -51,16 +57,6 @@ const MatchdayCarousel = ({
         break;
     }
   }
-
-  // TODO: Standings should be a map called teams?
-  // Standings just needs more data processing (set position property, and create separate clubs map)
-  // Then we won't need to loop here
-  const homeTeamData = standings.find(
-    team => team.id === recentMatchData.homeTeam?.id
-  );
-  const awayTeamData = standings.find(
-    team => team.id === recentMatchData.awayTeam?.id
-  );
 
   return (
     <article style={styles.container.layout}>
@@ -79,7 +75,7 @@ const MatchdayCarousel = ({
         />
       ) : (
         <article>
-           <h3>{`Upcoming Match`}</h3>
+          <h3>{`Upcoming Match`}</h3>
         </article>
       )}
 
@@ -100,17 +96,16 @@ const MatchdayCarousel = ({
                 crest={homeTeamData.crestUrl}
                 name={homeTeamData.name}
               />
-              {/* <span>{homeTeamData.name}</span> */}
-            </div>            
+            </div>
           </section>
 
-          {/* <section style={{ margin: "0 1rem" }}>
+          <section style={{ margin: "0 1rem" }}>
             <article>
-              <span>{recentMatchData.score?.fullTime?.homeTeam}</span>
+              <span>{matchdayMatch.score?.fullTime?.homeTeam}</span>
               <span style={{ margin: "0 1rem" }}>:</span>
-              <span>{recentMatchData.score?.fullTime?.awayTeam}</span>
+              <span>{matchdayMatch.score?.fullTime?.awayTeam}</span>
             </article>
-          </section> */}
+          </section>
 
           <section style={styles.badge.layout}>
             <div>
@@ -119,17 +114,16 @@ const MatchdayCarousel = ({
                 crest={awayTeamData.crestUrl}
                 name={awayTeamData.name}
               />
-              {/* <span>{homeTeamData.name}</span> */}
             </div>
           </section>
 
-          {/* <article>
+          <article>
             <Button
               icon={"navigate_next"}
-              disabled={activeMatchday === matches.length}
+              disabled={activeMatchday === activeClubMatches.length}
               onClick={e => handleActiveMatchday(e, NEXT)}
             />
-          </article> */}
+          </article>
         </section>
       )}
     </article>
@@ -152,15 +146,15 @@ const styles = {
     },
     theme: {
       fontWeight: "bold",
-      fontSize: "2.4rem",
+      fontSize: "2.4rem"
     }
   },
   badge: {
     layout: {
       display: "flex",
       flexDirection: "row",
-      alignItems: "center",
-    },
+      alignItems: "center"
+    }
   }
 };
 
