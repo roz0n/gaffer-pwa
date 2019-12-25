@@ -21,7 +21,7 @@ function YouTubeVideo({ id }) {
     <iframe
       width="100%"
       height="100%"
-      src={`https://www.youtube.com/embed/${id}?autoplay=1&rel=0&mute=1&loop=1&controls=0&showinfo=0&modestbranding=0`}
+      src={`https://www.youtube.com/embed/${id}?t=255&autoplay=1&rel=0&mute=1&loop=1&controls=0&showinfo=0&modestbranding=0`}
       frameborder="0"
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
@@ -38,13 +38,11 @@ const ContinentMap = ({ tipContent, setTooltipContent, style }) => {
   const [error, setError] = useState(false);
 
   function handleMouseEnter(e, geo, data) {
-    console.log("Mouse has entered");
     setVideoActive(true);
     setTooltipContent(<TipContent geoObject={geo} data={data} />);
   }
 
   function handleMouseLeave() {
-    console.log("Mouse has left");
     setVideoActive(false);
     setTooltipContent(null);
   }
@@ -68,21 +66,22 @@ const ContinentMap = ({ tipContent, setTooltipContent, style }) => {
 
   return (
     <>
-      {videoActive && (
+      {/* {videoActive && (
         <div style={{ position: "relative" }}>
           <div
             style={{
               position: "absolute",
               width: "100vw",
-              height: "200vh",
-              top: "-50rem",
+              height: "240vh",
+              top: "-70rem",
               zIndex: "-2"
             }}
           >
-            <YouTubeVideo id={"TlSf0zJrNNI"} />
+            <YouTubeVideo id={"yIdhRq-hqYA"} />
           </div>
         </div>
-      )}
+      )} */}
+
       {mapData && !error ? (
         <div style={{ height: "100%" }}>
           <ComposableMap
@@ -120,6 +119,7 @@ const ContinentMap = ({ tipContent, setTooltipContent, style }) => {
                           key={geo.rsmKey}
                           geography={geo}
                           fill="#9998A3"
+                          stroke="#55FF70"
                           style={styles}
                           onMouseEnter={e =>
                             handleMouseEnter(e, geo, countryData)
@@ -133,8 +133,9 @@ const ContinentMap = ({ tipContent, setTooltipContent, style }) => {
                       <Geography
                         key={geo.rsmKey}
                         geography={geo}
-                        fill="#404040"
-                        stroke="#404040"
+                        fill="rgba(64,64,64, 0.25)"
+                        // stroke="rgba(64,64,64, 0.25)"
+                        style={{ strokeLocation: "inside" }}
                       />
                     );
                   }
@@ -161,10 +162,11 @@ const ContinentMap = ({ tipContent, setTooltipContent, style }) => {
 
 const styles = {
   default: {
-    strokeWidth: ".2rem"
+    strokeWidth: ".2rem",
+    strokeLocation: "inside"
   },
   hover: {
-    fill: "red"
+    fill: "#55FF70"
   },
   pressed: {}
 };
