@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
+import queryString from "query-string";
 // Views
 import SettingsView from "../SettingsView";
 // Components
@@ -19,7 +21,9 @@ import {
 
 function Match(props) {
   const location = props.location?.pathname;
-  const [country, setCountry] = useState(COUNTRIES[DEFAULT_COUNTRY]["name"]);
+
+  // semi-persistent data
+  const [country, setCountry] = useState(null);
   const [leagues, setLeagues] = useState(null);
   const [matches, setMatches] = useState(null);
   const [standings, setStandings] = useState(null);
@@ -27,7 +31,7 @@ function Match(props) {
   // Active league states
   const [activeLeagueId, setActiveLeagueId] = useState(null);
   const [activeLeagueData, setActiveLeagueData] = useState(null);
-  const [activeClubId, setactiveClubId] = useState(null);
+  const [activeClubId, setActiveClubId] = useState(null);
 
   // Loading states
   const [loading, setLoading] = useState(false);
@@ -37,7 +41,7 @@ function Match(props) {
     setLeagues(null);
     setActiveLeagueId(null);
     setStandings(null);
-    setactiveClubId(null);
+    setActiveClubId(null);
     setActiveLeagueData(null);
     setError(false);
   }
@@ -59,6 +63,25 @@ function Match(props) {
     }
   }
 
+  // Handle initial load and routing
+  useEffect(() => {
+    const params = queryString.parse(props.location.search);
+    const { country: activeCountry } = params;
+
+    if (!params) {
+      return <Redirect to="/matches" />;
+    }
+
+    if (activeCountry) {
+      setCountry(activeCountry);
+    } else {
+      handleReset();
+    }
+
+    console.log("PARAMS", params);
+  }, []);
+
+  // Handle data fetching
   useEffect(() => {
     async function* fetchAllData() {
       try {
@@ -103,7 +126,7 @@ function Match(props) {
 
       loadData();
       setActiveLeagueData(activeLeague);
-    } else if (!activeLeagueId && !leagues) {
+    } else if (!activeLeagueId && !leagues && country) {
       fetchLeagues(country);
     }
   }, [country, leagues, activeLeagueId, activeLeagueData]);
@@ -135,7 +158,7 @@ function Match(props) {
                 <div style={{ height: "inherit" }}>
                   <Standings
                     standings={standings}
-                    handleClick={setactiveClubId}
+                    handleClick={setActiveClubId}
                   />
                   <Analytics
                     standings={standings} // TODO: Standings should be a map

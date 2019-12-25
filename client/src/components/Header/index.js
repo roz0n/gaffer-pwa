@@ -1,21 +1,30 @@
 import React from "react";
 import Radium from "radium";
-import { Link } from "react-router-dom";
+import { Link, Redirect, withRouter } from "react-router-dom";
 // Components
 import Button from "../Button";
 
 const Header = ({
+  country,
   countries,
   leagues,
   setCountry,
   setActiveLeagueId,
   handleReset,
   location,
-  loading
+  loading,
+  ...props
 }) => {
   function handleCountryChange(e) {
+    const countryName = e.target.value;
+
     setCountry(e.target.value);
     handleReset();
+    
+    props.history.push({
+      pathname: "/matches",
+      search: `?country=${countryName}`
+    });
   }
 
   function handleLeagueChange(e) {
@@ -23,7 +32,7 @@ const Header = ({
   }
 
   return (
-    <nav style={[styles.layout, styles.size, styles.theme]}>
+    <nav style={Object.values(styles)}>
       <section>
         <Link to="/">
           <Button icon={"language"} />
@@ -35,7 +44,13 @@ const Header = ({
           name="countrySelect"
           disabled={loading}
           onChange={handleCountryChange}
+          value={country || "default"}
         >
+          {!country && (
+            <option value="default" disabled>
+              Select a country
+            </option>
+          )}
           {countries.map((country, i) => (
             <option key={`country-${i}`} value={country.name}>
               {country.name}
@@ -46,7 +61,7 @@ const Header = ({
           name="leagueSelect"
           disabled={loading}
           onChange={handleLeagueChange}
-          defaultValue="default"
+          value={"default"}
         >
           <option value="default" disabled>
             Select a league
@@ -92,4 +107,4 @@ const styles = {
   }
 };
 
-export default React.memo(Radium(Header));
+export default React.memo(withRouter(Radium(Header)));

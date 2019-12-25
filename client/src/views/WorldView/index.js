@@ -18,6 +18,8 @@ import { roundLargeNumber } from "../../utils/numberUtils";
 
 // TODO: Lots of work to do in this component
 const MapChart = ({ tipContent, setTooltipContent, style }) => {
+  // Loading states
+  const [loading, setLoading] = useState(false);
   const [mapData, setMapData] = useState(null);
   const [error, setError] = useState(false);
 
@@ -28,6 +30,8 @@ const MapChart = ({ tipContent, setTooltipContent, style }) => {
         setMapData(request.data);
       } catch (error) {
         setError(true);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -46,7 +50,7 @@ const MapChart = ({ tipContent, setTooltipContent, style }) => {
             projection="geoAzimuthalEqualArea"
             projectionConfig={{
               rotate: [-10, -48, -2],
-              scale: 900,
+              scale: 900
             }}
             showCenter={true}
           >
@@ -78,7 +82,11 @@ const MapChart = ({ tipContent, setTooltipContent, style }) => {
                     return (
                       <Link
                         key={`${geo.rsmKey}-Link`}
-                        to={`/matches/${countryData?.name}`}
+                        to={{
+                          pathname: "/matches",
+                          search: `?country=${countryData.name}`,
+                        }}
+                        state={{ selectedCountry: countryData?.name }}
                       >
                         <Geography
                           key={geo.rsmKey}

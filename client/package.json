@@ -9,6 +9,7 @@
     "arnie-ui": "roz0n/arnie-ui#master",
     "flag-icon-css": "^3.4.5",
     "material-design-icons": "^3.0.1",
+    "query-string": "^6.9.0",
     "radium": "^0.26.0",
     "react": "^16.12.0",
     "react-animations": "^1.0.0",
