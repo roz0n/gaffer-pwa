@@ -9,19 +9,45 @@ import {
   Graticule
 } from "react-simple-maps";
 // Components
+import TipContent from "../../components/TipContent";
 import EmptyContent from "../../components/EmptyContent";
 import Icon from "../../components/Icon";
 // Utils
 import COUNTRIES from "../../constants/countries";
 import { fetchMapData } from "../../data/api";
-import { roundLargeNumber } from "../../utils/numberUtils";
+
+function YouTubeVideo({ id }) {
+  return (
+    <iframe
+      width="100%"
+      height="100%"
+      src={`https://www.youtube.com/embed/${id}?autoplay=1&mute=1 `}
+      frameborder="0"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  );
+}
 
 // TODO: Lots of work to do in this component
 const ContinentMap = ({ tipContent, setTooltipContent, style }) => {
+  const [mapData, setMapData] = useState(null);
+  const [videoActive, setVideoActive] = useState(false);
   // Loading states
   const [loading, setLoading] = useState(false);
-  const [mapData, setMapData] = useState(null);
   const [error, setError] = useState(false);
+
+  function handleMouseEnter(e, geo, data) {
+    console.log("Mouse has entered");
+    setVideoActive(true);
+    setTooltipContent(<TipContent geoObject={geo} data={data} />);
+  }
+
+  function handleMouseLeave() {
+    console.log("Mouse has left");
+    setVideoActive(false);
+    setTooltipContent(null);
+  }
 
   useEffect(() => {
     async function getMapData() {
@@ -42,6 +68,20 @@ const ContinentMap = ({ tipContent, setTooltipContent, style }) => {
 
   return (
     <>
+      {videoActive && (
+        <div style={{ position: "relative" }}>
+          <div
+            style={{
+              position: "absolute",
+              width: "100vw",
+              height: "100vh",
+              zIndex: "-2"
+            }}
+          >
+            <YouTubeVideo id={"TlSf0zJrNNI"} />
+          </div>
+        </div>
+      )}
       {mapData && !error ? (
         <div style={{ height: "100%" }}>
           <ComposableMap
@@ -66,19 +106,6 @@ const ContinentMap = ({ tipContent, setTooltipContent, style }) => {
                   );
 
                   if (countryData?.name) {
-                    const TipContent = () => {
-                      const { POP_EST } = geo.properties;
-
-                      return (
-                        <article>
-                          <Icon type="flag" code={countryData?.code} />{" "}
-                          <span>{`${countryData.name} — ${roundLargeNumber(
-                            POP_EST
-                          )}`}</span>
-                        </article>
-                      );
-                    };
-
                     return (
                       <Link
                         key={`${geo.rsmKey}-Link`}
@@ -93,8 +120,10 @@ const ContinentMap = ({ tipContent, setTooltipContent, style }) => {
                           geography={geo}
                           fill="#9998A3"
                           style={styles}
-                          onMouseEnter={() => setTooltipContent(<TipContent />)}
-                          onMouseLeave={() => setTooltipContent(null)}
+                          onMouseEnter={e =>
+                            handleMouseEnter(e, geo, countryData)
+                          }
+                          onMouseLeave={() => handleMouseLeave()}
                         />
                       </Link>
                     );

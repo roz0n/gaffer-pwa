@@ -27,7 +27,7 @@ const styles = {
     position: "relative",
     height: "100vh",
     width: "100vw",
-    backgroundColor: "black",
+    backgroundColor: "rgba(0, 0, 0, 0.92)",
     overflow: "hidden"
   },
   header: {
