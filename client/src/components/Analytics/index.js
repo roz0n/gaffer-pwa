@@ -3,10 +3,19 @@ import Radium from "radium";
 // Components
 import Tabs from "../Tabs";
 import MatchdayCarousel from "../MatchdayCarousel";
+// Utils
+import COUNTRIES from "../../constants/countries";
 
-function Analytics({ standings, allMatches, leagueData, activeClubId }) {
-  const { name = "", currentSeason = "" } = leagueData || {};
+function Analytics({ country, standings, allMatches, leagueData = [], activeClubId }) {
+  // TODO: Get rid of these damn loops
+  const activeLeague = leagueData.find(league => league.id === COUNTRIES[country].leagueId);
+  const { currentSeason } = activeLeague;
   const { currentMatchday } = currentSeason;
+
+  console.log("LEAGUE DATA ANA", leagueData);
+  console.log("targetLeague",  activeLeague)
+  // console.log("CURRENT MATCHDAY", leagueData, currentMatchday);
+
   const tabs = [
     {
       id: 0,
@@ -30,13 +39,13 @@ function Analytics({ standings, allMatches, leagueData, activeClubId }) {
         <article style={style.container}>
           <div style={[style.gridItem, style.content]}>
             <span style={{ borderBottom: "1px solid red" }}>
-            <MatchdayCarousel
-              standings={standings}
-              allMatches={allMatches}
-              activeClubId={activeClubId}
-              activeLeagueName={name}
-              currentMatchday={currentMatchday}
-            />
+              <MatchdayCarousel
+                standings={standings}
+                allMatches={allMatches}
+                activeClubId={activeClubId}
+                activeLeagueName={activeLeague.name}
+                currentMatchday={currentMatchday}
+              />
             </span>
             <Tabs tabs={tabs} activeTab={1} />
           </div>

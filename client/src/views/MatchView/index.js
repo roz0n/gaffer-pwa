@@ -28,8 +28,8 @@ function Match(props) {
   // Semi-persistent data
   const [country, setCountry] = useState(null);
   const [league, setLeague] = useState(null);
-  const [matches, setMatches] = useState(null);
   const [standings, setStandings] = useState(null);
+  const [matches, setMatches] = useState(null);
 
   // Active league states
   const [activeClubId, setActiveClubId] = useState(null);
@@ -64,9 +64,10 @@ function Match(props) {
         const leagueData = await fetchLeaguesByCountry(country);
 
         if (leagueData.success) {
-          yield { payload: leagueData, handleState: setLeague }
+          console.log("SENDING THIS AS PAYLOAD", leagueData)
+          yield { payload: leagueData, handleState: setLeague };
         } else {
-          throw new Error("Error fetching league data")
+          throw new Error("Error fetching league data");
         }
 
         const matchData = await fetchLeagueById(countryData.leagueId);
@@ -98,6 +99,8 @@ function Match(props) {
         const { payload, handleState } = request;
         const { data } = payload;
 
+        console.log("SETTING STATE", payload);
+
         handleState(data);
       }
     }
@@ -105,19 +108,9 @@ function Match(props) {
     if (country && countryData && !matches) {
       loadData();
     }
-
-    // if (country && leagues && !leagueData) {
-    //   const activeLeague = leagues.find(
-    //     league => league.id === COUNTRIES[country]["leagueId"]
-    //   );
-
-    //   loadData();
-    //   setleagueData(activeLeague);
-    // } else if (country && !COUNTRIES[country]["leagueId"] && !leagues) {
-    //   fetchLeagues(country);
-    // }
-
   }, [country, matches]);
+
+  console.log("LEAGUE", league);
 
   return (
     <Layout>
@@ -148,6 +141,7 @@ function Match(props) {
                     handleClick={setActiveClubId}
                   />
                   <Analytics
+                    country={country}
                     standings={standings} // TODO: Standings should be a map
                     allMatches={matches}
                     leagueData={league}

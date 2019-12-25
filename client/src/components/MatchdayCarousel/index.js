@@ -19,18 +19,23 @@ const MatchdayCarousel = ({
   activeClubId,
   currentMatchday = ""
 }) => {
+  
   const [activeMatchday, setActiveMatchday] = useState();
-
-  const matches = allMatches.filter(
+  const clubMatches = allMatches.filter(
     match =>
-      match.homeTeam.id === +activeClubId || match.awayTeam.id === +activeClubId
+      match.homeTeam.id === activeClubId || match.awayTeam.id === activeClubId
   );
 
+  console.log("MATCHES ***", clubMatches);
+
   // TODO: Do we need this loop here as well?
-  const recentMatchData = matches?.filter(match => {
-    const matchdayToReference = activeMatchday || currentMatchday;
+  const recentMatchData = clubMatches?.filter(match => {
+    console.log("** MATCH **", match, activeMatchday, currentMatchday);
+    const matchdayToReference = +activeMatchday || +currentMatchday;
     return match.matchday === +matchdayToReference;
-  })[0];
+  });
+
+  console.log("recentMatchData ***", recentMatchData);
 
   function handleActiveMatchday(e, type) {
     const matchdayToReference = +activeMatchday || +currentMatchday;
@@ -99,13 +104,13 @@ const MatchdayCarousel = ({
             </div>            
           </section>
 
-          <section style={{ margin: "0 1rem" }}>
+          {/* <section style={{ margin: "0 1rem" }}>
             <article>
               <span>{recentMatchData.score?.fullTime?.homeTeam}</span>
               <span style={{ margin: "0 1rem" }}>:</span>
               <span>{recentMatchData.score?.fullTime?.awayTeam}</span>
             </article>
-          </section>
+          </section> */}
 
           <section style={styles.badge.layout}>
             <div>
@@ -118,13 +123,13 @@ const MatchdayCarousel = ({
             </div>
           </section>
 
-          <article>
+          {/* <article>
             <Button
               icon={"navigate_next"}
               disabled={activeMatchday === matches.length}
               onClick={e => handleActiveMatchday(e, NEXT)}
             />
-          </article>
+          </article> */}
         </section>
       )}
     </article>
