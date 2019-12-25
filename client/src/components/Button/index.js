@@ -40,7 +40,10 @@ const styles = {
     backgroundColor: "unset",
     color: "#FFFFFF",
     ":hover": {
-      cursor: "pointer"
+      color: "#141414",
+      cursor: "pointer",
+      backgroundColor: "rgb(85, 255, 112)",
+      border: "1px solid rgb(85, 255, 112)",
     }
   }
 };

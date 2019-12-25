@@ -3,14 +3,15 @@ import Radium from "radium";
 // Components
 import NumberLabel from "../NumberLabel";
 
-const Badge = ({ id, position, crest, name, label = false, onClick }) => {
+const Badge = ({ id, position, crest, name, label = false, onClick, style }) => {
   return (
     <article style={{ position: "relative" }}>
       <div
         style={[
           styles.container.size,
           styles.container.layout,
-          styles.container.theme
+          styles.container.theme,
+          style
         ]}
         onClick={e => onClick && onClick(e, id)}
       >
@@ -34,7 +35,8 @@ const styles = {
       alignItems: "center",
       overflow: "hidden",
       borderRadius: "100%",
-      margin: ".25rem 1rem"
+      margin: ".25rem 1rem",
+      transition: "all .2s ease-in"
     },
     size: {
       maxHeight: "7.5rem",
@@ -48,8 +50,10 @@ const styles = {
     }
   },
   badge: {
-    layout: { boxSizing: "border-box" },
-    size: { width: "4rem" },
+    layout: { 
+      boxSizing: "border-box",
+    },
+    size: { width: "6.5rem" },
     theme: {
       ":hover": {
         cursor: "pointer"

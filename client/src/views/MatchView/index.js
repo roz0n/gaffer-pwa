@@ -129,7 +129,11 @@ function Match(props) {
 
       <div style={{ width: "100%", display: "flex", flexDirection: "row" }}>
         {standings && !settingsViewActive && (
-          <Standings standings={standings} handleClick={setActiveClubId} />
+          <Standings
+            standings={standings}
+            activeClubId={activeClubId}
+            handleClick={setActiveClubId}
+          />
         )}
 
         <div style={style.body}>
@@ -151,7 +155,7 @@ function Match(props) {
 
           {loading && <EmptyContent message={"Preparing tactics..."} />}
 
-          {!league && !loading && (
+          {!league && !loading && !error && (
             <EmptyContent message={"Select a club from the left menu"} />
           )}
 

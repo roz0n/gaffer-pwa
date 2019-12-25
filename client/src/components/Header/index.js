@@ -30,7 +30,7 @@ const Header = ({
     <nav style={Object.values(styles)}>
       <section>
         <Link to="/">
-          <Button icon={"language"} />
+          <Button icon={"arrow_back"} />
         </Link>
       </section>
 
@@ -78,12 +78,11 @@ const styles = {
   },
   size: {
     padding: "0 1.25rem",
-    height: "4rem",
+    height: "5rem",
     width: "100%"
   },
   theme: {
     backgroundColor: "#141414",
-    borderBottom: "1px solid #181818"
   }
 };
 

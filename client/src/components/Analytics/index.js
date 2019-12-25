@@ -86,7 +86,7 @@ const style = {
   },
   gridContent: {
     padding: "4rem",
-    borderRight: "1px solid rgb(24, 24, 24)"
+    borderRight: "1px solid rgb(32, 32, 32)"
     // backgroundColor: "cyan"
   },
   sidebar: {
