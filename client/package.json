@@ -7,6 +7,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "arnie-ui": "roz0n/arnie-ui#master",
+    "flag-icon-css": "^3.4.5",
     "material-design-icons": "^3.0.1",
     "radium": "^0.26.0",
     "react": "^16.12.0",

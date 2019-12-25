@@ -1,24 +1,31 @@
 export default {
   en: {
     name: "england",
-    altName: "united kingdom"
+    altName: "united kingdom",
+    code: "gb-eng"
   },
   es: {
-    name: "spain"
+    name: "spain",
+    code: "es"
   },
-  ge: {
-    name: "germany"
+  de: {
+    name: "germany",
+    code: "de"
   },
   it: {
-    name: "italy"
+    name: "italy",
+    code: "it"
   },
   fr: {
-    name: "france"
+    name: "france",
+    code: "fr"
   },
   pt: {
-    name: "portugal"
+    name: "portugal",
+    code: "pt"
   },
-  nd: {
-    name: "netherlands"
+  nl: {
+    name: "netherlands",
+    code: "nl"
   },
 };

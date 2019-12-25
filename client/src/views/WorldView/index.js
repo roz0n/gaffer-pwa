@@ -8,15 +8,12 @@ import {
   Geography,
   Graticule
 } from "react-simple-maps";
+// Components
+import Icon from "../../components/Icon";
 // Constants
 import COUNTRIES from "../../constants/countries";
 
-// TODO: Can this be a hash?
-const countriesList = [
-  ...Object.values(COUNTRIES).map(country => country.name),
-  ...Object.values(COUNTRIES).map(country => country.altName)
-];
-
+// TODO: Lots of work to do in this component
 const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
 
@@ -35,7 +32,6 @@ const MapChart = ({ setTooltipContent, style }) => {
     <ComposableMap
       data-tip=""
       style={style}
-      preserveAspectRatio={true}
       projection="geoAzimuthalEqualArea"
       projectionConfig={{
         rotate: [-10.0, -52.0, -10],
@@ -47,23 +43,33 @@ const MapChart = ({ setTooltipContent, style }) => {
         {({ geographies }) =>
           geographies.map(geo => {
             const geoName = geo.properties.NAME;
-            const countryName = geoName?.toLowerCase();
+            const countryData = Object.values(COUNTRIES).find(
+              country =>
+                country.name === geoName?.toLowerCase() ||
+                country.altName === geoName?.toLowerCase()
+            );
 
-            if (countriesList.includes(countryName)) {
+            if (countryData?.name) {
+              const TipContent = () => {
+                const { POP_EST } = geo.properties;
+
+                return (
+                  <article>
+                    <Icon type="flag" code={countryData?.code} />{" "}
+                    <span>{`${countryData.name} — ${rounded(POP_EST)}`}</span>
+                  </article>
+                );
+              };
+
               return (
-                <Link to={`/matches/${countryName}`}>
+                <Link key={`${geo.rsmKey}-Link`} to={`/matches/${countryData?.name}`}>
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
                     fill="#9998A3"
                     style={countryStyles}
-                    onMouseEnter={() => {
-                      const { POP_EST } = geo.properties;
-                      setTooltipContent(`${geoName} — ${rounded(POP_EST)}`);
-                    }}
-                    onMouseLeave={() => {
-                      setTooltipContent("");
-                    }}
+                    onMouseEnter={() => setTooltipContent(<TipContent />)}
+                    onMouseLeave={() => setTooltipContent(null)}
                   />
                 </Link>
               );
@@ -109,9 +115,7 @@ const World = Radium(() => {
         setTooltipContent={setContent}
         style={{ height: "100%", width: "100%" }}
       />
-      <ReactTooltip>
-        {content}
-      </ReactTooltip>
+      <ReactTooltip>{content}</ReactTooltip>
     </div>
   );
 });
