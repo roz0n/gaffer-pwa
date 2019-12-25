@@ -44,7 +44,6 @@ const MapChart = ({ style }) => {
                     key={geo.rsmKey}
                     geography={geo}
                     fill="#9998A3"
-                    stroke="#EAEAEC"
                     style={countryStyles}
                   />
                 </Link>
@@ -54,7 +53,7 @@ const MapChart = ({ style }) => {
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill="#000000"
+                  fill="#404040"
                   stroke="#404040"
                 />
               );
@@ -101,7 +100,7 @@ const styles = {
 
 const countryStyles = {
   default: {
-    zIndex: "999999"
+    strokeWidth: ".2rem"
   },
   hover: {
     fill: "red"
