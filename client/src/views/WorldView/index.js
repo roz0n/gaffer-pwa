@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Radium from "radium";
 import { Link } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
@@ -9,84 +9,115 @@ import {
   Graticule
 } from "react-simple-maps";
 // Components
+import EmptyContent from "../../components/EmptyContent";
 import Icon from "../../components/Icon";
-// Constants
+// Utils
 import COUNTRIES from "../../constants/countries";
+import { fetchMapData } from "../../data/api";
+import { roundLargeNumber } from "../../utils/numberUtils";
 
 // TODO: Lots of work to do in this component
-const geoUrl =
-  "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
+const MapChart = ({ tipContent, setTooltipContent, style }) => {
+  const [mapData, setMapData] = useState(null);
+  const [error, setError] = useState(false);
 
-const rounded = num => {
-  if (num > 1000000000) {
-    return Math.round(num / 100000000) / 10 + "Bn";
-  } else if (num > 1000000) {
-    return Math.round(num / 100000) / 10 + "M";
-  } else {
-    return Math.round(num / 100) / 10 + "K";
-  }
-};
+  useEffect(() => {
+    async function getMapData() {
+      try {
+        const request = await fetchMapData();
+        setMapData(request.data);
+      } catch (error) {
+        setError(true);
+      }
+    }
 
-const MapChart = ({ setTooltipContent, style }) => {
+    if (!mapData) {
+      getMapData();
+    }
+  }, [mapData]);
+
   return (
-    <ComposableMap
-      data-tip=""
-      style={style}
-      projection="geoAzimuthalEqualArea"
-      projectionConfig={{
-        rotate: [-10.0, -52.0, -10],
-        scale: 900
-      }}
-    >
-      <Graticule stroke="#181818" />
-      <Geographies geography={geoUrl}>
-        {({ geographies }) =>
-          geographies.map(geo => {
-            const geoName = geo.properties.NAME;
-            const countryData = Object.values(COUNTRIES).find(
-              country =>
-                country.name === geoName?.toLowerCase() ||
-                country.altName === geoName?.toLowerCase()
-            );
+    <>
+      {mapData && !error ? (
+        <div style={{ height: "100%" }}>
+          <ComposableMap
+            data-tip=""
+            style={style}
+            projection="geoAzimuthalEqualArea"
+            projectionConfig={{
+              rotate: [-10, -48, -2],
+              scale: 900,
+            }}
+            showCenter={true}
+          >
+            <Graticule stroke="#181818" />
+            <Geographies geography={mapData}>
+              {({ geographies }) =>
+                geographies.map(geo => {
+                  const geoName = geo.properties.NAME;
+                  const countryData = Object.values(COUNTRIES).find(
+                    country =>
+                      country.name === geoName?.toLowerCase() ||
+                      country.altName === geoName?.toLowerCase()
+                  );
 
-            if (countryData?.name) {
-              const TipContent = () => {
-                const { POP_EST } = geo.properties;
+                  if (countryData?.name) {
+                    const TipContent = () => {
+                      const { POP_EST } = geo.properties;
 
-                return (
-                  <article>
-                    <Icon type="flag" code={countryData?.code} />{" "}
-                    <span>{`${countryData.name} — ${rounded(POP_EST)}`}</span>
-                  </article>
-                );
-              };
+                      return (
+                        <article>
+                          <Icon type="flag" code={countryData?.code} />{" "}
+                          <span>{`${countryData.name} — ${roundLargeNumber(
+                            POP_EST
+                          )}`}</span>
+                        </article>
+                      );
+                    };
 
-              return (
-                <Link key={`${geo.rsmKey}-Link`} to={`/matches/${countryData?.name}`}>
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    fill="#9998A3"
-                    style={countryStyles}
-                    onMouseEnter={() => setTooltipContent(<TipContent />)}
-                    onMouseLeave={() => setTooltipContent(null)}
-                  />
-                </Link>
-              );
-            } else {
-              return (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill="#404040"
-                  stroke="#404040"
-                />
-              );
-            }
-          })
-        }
-      </Geographies>
-    </ComposableMap>
+                    return (
+                      <Link
+                        key={`${geo.rsmKey}-Link`}
+                        to={`/matches/${countryData?.name}`}
+                      >
+                        <Geography
+                          key={geo.rsmKey}
+                          geography={geo}
+                          fill="#9998A3"
+                          style={countryStyles}
+                          onMouseEnter={() => setTooltipContent(<TipContent />)}
+                          onMouseLeave={() => setTooltipContent(null)}
+                        />
+                      </Link>
+                    );
+                  } else {
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        fill="#404040"
+                        stroke="#404040"
+                      />
+                    );
+                  }
+                })
+              }
+            </Geographies>
+          </ComposableMap>
+          <ReactTooltip>{tipContent}</ReactTooltip>
+        </div>
+      ) : (
+        <div style={{ height: "100%", color: "#ffffff" }}>
+          <EmptyContent message={"Warming up..."} />
+        </div>
+      )}
+
+      {error && (
+        <EmptyContent message={"There was an error loading the map"}>
+          <button onClick={() => alert("Try again")}>Try again?</button>
+        </EmptyContent>
+      )}
+    </>
   );
 };
 
@@ -112,10 +143,10 @@ const World = Radium(() => {
       </article>
 
       <MapChart
+        tipContent={content}
         setTooltipContent={setContent}
         style={{ height: "100%", width: "100%" }}
       />
-      <ReactTooltip>{content}</ReactTooltip>
     </div>
   );
 });

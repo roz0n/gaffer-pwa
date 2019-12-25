@@ -19,3 +19,7 @@ export async function fetchLeagueStandings(id) {
 // export async function fetchLeagueClubs(id) {
 //   return await clientFetch(`/clubs/${id}`).then(res => res.json());
 // }
+
+export async function fetchMapData() {
+  return await clientFetch(`/map/data`).then(res => res.json());
+}
