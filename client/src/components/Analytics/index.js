@@ -38,9 +38,9 @@ function Analytics({
   ];
   return (
     <>
-      {activeClubId && season ? (
+      {country && activeClubId && season ? (
         <article style={style.container}>
-          <div style={[style.gridItem, style.content]}>
+          <div style={[style.gridItem, style.gridContent]}>
             <span style={{ borderBottom: "1px solid red" }}>
               <MatchdayCarousel
                 standings={standings}
@@ -58,7 +58,7 @@ function Analytics({
           </aside>
         </article>
       ) : (
-        <article style={style.fullHeight}>
+        <article style={style.content}>
           Select a club to view more information it
         </article>
       )}
@@ -72,19 +72,19 @@ const style = {
     display: "grid",
     gridTemplateColumns: "1fr 32.5%",
     gridTemplateRows: "1fr",
-    height: "100%"
+    height: "100vh"
   },
-  fullHeight: {
+  content: {
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
-    height: "100%"
+    height: "100vh",
   },
   gridItem: {
     display: "flex",
     flexDirection: "column"
   },
-  content: {
+  gridContent: {
     padding: "4rem",
     backgroundColor: "cyan"
   },

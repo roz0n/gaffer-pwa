@@ -1,9 +1,9 @@
 import React from "react";
 import Radium from "radium";
 
-const EmptyContent = ({ icon, children, message }) => {
+const EmptyContent = ({ icon, children, message, style }) => {
   return (
-    <article style={styles}>
+    <article style={style ? style : styles}>
       {message && <p>{message}</p>}
       {children}
     </article>

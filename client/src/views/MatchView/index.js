@@ -63,7 +63,6 @@ function Match(props) {
     async function* fetchAllData() {
       try {
         setLoading(true);
-
         const leagueData = await fetchLeaguesByCountry(country);
 
         if (leagueData.success) {
@@ -122,40 +121,25 @@ function Match(props) {
       />
 
       <div style={style.body}>
-        {/* // TODO: Rewrite this ternary */}
-
-        {loading && !error ? (
-          <article style={style.fullHeight}>Loading...</article>
-        ) : (
-          league &&
-          !error && (
-            <section style={{ height: "100%" }}>
-              {location === "/settings" ? (
-                <SettingsView />
-              ) : (
-                <div style={{ height: "inherit" }}>
-                  <Standings
-                    standings={standings}
-                    handleClick={setActiveClubId}
-                  />
-                  <Analytics
-                    country={country}
-                    standings={standings} // TODO: Standings should be a map
-                    allMatches={matches}
-                    leagueData={league}
-                    activeClubId={activeClubId}
-                  />
-                  <Footer />
-                </div>
-              )}
-            </section>
-          )
+        {league && !loading && (
+          <section style={{ height: "100%" }}>
+            <div style={{ height: "inherit" }}>
+              <Standings standings={standings} handleClick={setActiveClubId} />
+              <Analytics
+                country={country}
+                standings={standings} // TODO: Standings should be a map
+                allMatches={matches}
+                leagueData={league}
+                activeClubId={activeClubId}
+              />
+            </div>
+          </section>
         )}
 
-        {!loading && !league && !activeClubId && !error && (
-          <EmptyContent
-            message={"Start by selecting a country from the top menu"}
-          />
+        {loading && <EmptyContent message={"Preparing tactics..."} />}
+
+        {!league && !loading && (
+          <EmptyContent message={"Select a club from the left menu"} />
         )}
 
         {error && (
@@ -164,6 +148,7 @@ function Match(props) {
           </EmptyContent>
         )}
       </div>
+      <Footer />
     </Layout>
   );
 }
@@ -173,9 +158,9 @@ const style = {
     display: "flex",
     justifyContent: "space-between",
     flexDirection: "column",
-    height: "calc(100vh - 80px)"
+    height: "100vh"
   },
-  fullHeight: {
+  content: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-around",
