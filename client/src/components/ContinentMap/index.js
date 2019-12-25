@@ -21,7 +21,7 @@ function YouTubeVideo({ id }) {
     <iframe
       width="100%"
       height="100%"
-      src={`https://www.youtube.com/embed/${id}?autoplay=1&mute=1 `}
+      src={`https://www.youtube.com/embed/${id}?autoplay=1&rel=0&mute=1&loop=1&controls=0&showinfo=0&modestbranding=0`}
       frameborder="0"
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
@@ -74,7 +74,8 @@ const ContinentMap = ({ tipContent, setTooltipContent, style }) => {
             style={{
               position: "absolute",
               width: "100vw",
-              height: "100vh",
+              height: "200vh",
+              top: "-50rem",
               zIndex: "-2"
             }}
           >
