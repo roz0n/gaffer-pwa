@@ -12,25 +12,26 @@ import EmptyContent from "../../components/EmptyContent";
 import Footer from "../../components/Footer";
 // Utils
 import COUNTRIES from "../../constants/countries";
-import { DEFAULT_COUNTRY } from "../../config/defaults";
 import {
   fetchLeagueById,
-  fetchLeaguesByCountry,
-  fetchLeagueStandings
+  fetchLeagueStandings,
+  fetchLeaguesByCountry
 } from "../../data/api";
 
 function Match(props) {
-  const location = props.location?.pathname;
+  // Routing
+  const { location } = props;
+  const params = queryString.parse(location.search);
+  const { country: countryParam } = params;
+  const countryData = COUNTRIES[countryParam];
 
-  // semi-persistent data
+  // Semi-persistent data
   const [country, setCountry] = useState(null);
-  const [leagues, setLeagues] = useState(null);
+  const [league, setLeague] = useState(null);
   const [matches, setMatches] = useState(null);
   const [standings, setStandings] = useState(null);
 
   // Active league states
-  const [activeLeagueId, setActiveLeagueId] = useState(null);
-  const [activeLeagueData, setActiveLeagueData] = useState(null);
   const [activeClubId, setActiveClubId] = useState(null);
 
   // Loading states
@@ -38,47 +39,20 @@ function Match(props) {
   const [error, setError] = useState(false);
 
   function handleReset() {
-    setLeagues(null);
-    setActiveLeagueId(null);
     setStandings(null);
     setActiveClubId(null);
-    setActiveLeagueData(null);
     setError(false);
-  }
-
-  async function fetchLeagues(country) {
-    try {
-      setLoading(true);
-      const leaguesData = await fetchLeaguesByCountry(country);
-
-      if (leaguesData.success) {
-        setLeagues(leaguesData.data);
-      } else {
-        throw new Error("Error fetching leagues");
-      }
-    } catch (error) {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
   }
 
   // Handle initial load and routing
   useEffect(() => {
-    const params = queryString.parse(props.location.search);
-    const { country: activeCountry } = params;
-
     if (!params) {
-      return <Redirect to="/matches" />;
+      return <Redirect to="/" />;
     }
 
-    if (activeCountry) {
-      setCountry(activeCountry);
-    } else {
-      handleReset();
+    if (countryParam) {
+      setCountry(countryParam);
     }
-
-    console.log("PARAMS", params);
   }, []);
 
   // Handle data fetching
@@ -86,15 +60,24 @@ function Match(props) {
     async function* fetchAllData() {
       try {
         setLoading(true);
-        const matchData = await fetchLeagueById(activeLeagueId);
+
+        const leagueData = await fetchLeaguesByCountry(country);
+
+        if (leagueData.success) {
+          yield { payload: leagueData, handleState: setLeague }
+        } else {
+          throw new Error("Error fetching league data")
+        }
+
+        const matchData = await fetchLeagueById(countryData.leagueId);
 
         if (matchData.success) {
           yield { payload: matchData, handleState: setMatches };
         } else {
-          throw new Error("Error fetching league data");
+          throw new Error("Error fetching league matches");
         }
 
-        const standingsData = await fetchLeagueStandings(activeLeagueId);
+        const standingsData = await fetchLeagueStandings(countryData.leagueId);
 
         if (standingsData.success) {
           yield { payload: standingsData, handleState: setStandings };
@@ -119,37 +102,41 @@ function Match(props) {
       }
     }
 
-    if (activeLeagueId && !activeLeagueData) {
-      const activeLeague = leagues.find(
-        league => league.id === +activeLeagueId
-      );
-
+    if (country && countryData && !matches) {
       loadData();
-      setActiveLeagueData(activeLeague);
-    } else if (!activeLeagueId && !leagues && country) {
-      fetchLeagues(country);
     }
-  }, [country, leagues, activeLeagueId, activeLeagueData]);
+
+    // if (country && leagues && !leagueData) {
+    //   const activeLeague = leagues.find(
+    //     league => league.id === COUNTRIES[country]["leagueId"]
+    //   );
+
+    //   loadData();
+    //   setleagueData(activeLeague);
+    // } else if (country && !COUNTRIES[country]["leagueId"] && !leagues) {
+    //   fetchLeagues(country);
+    // }
+
+  }, [country, matches]);
 
   return (
     <Layout>
       <Header
         location={location}
         countries={Object.values(COUNTRIES)}
-        leagues={leagues}
         country={country}
         setCountry={setCountry}
-        activeLeagueId={activeLeagueId}
-        setActiveLeagueId={setActiveLeagueId}
         handleReset={handleReset}
         loading={loading}
       />
 
       <div style={style.body}>
+        {/* // TODO: Rewrite this ternary */}
+
         {loading && !error ? (
           <article style={style.fullHeight}>Loading...</article>
         ) : (
-          activeLeagueData &&
+          league &&
           !error && (
             <section style={{ height: "100%" }}>
               {location === "/settings" ? (
@@ -163,7 +150,7 @@ function Match(props) {
                   <Analytics
                     standings={standings} // TODO: Standings should be a map
                     allMatches={matches}
-                    activeLeagueData={activeLeagueData}
+                    leagueData={league}
                     activeClubId={activeClubId}
                   />
                   <Footer />
@@ -173,7 +160,7 @@ function Match(props) {
           )
         )}
 
-        {!loading && !activeLeagueData && !activeClubId && !error && (
+        {!loading && !league && !activeClubId && !error && (
           <EmptyContent
             message={"Start by selecting a country from the top menu"}
           />

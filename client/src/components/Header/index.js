@@ -7,9 +7,7 @@ import Button from "../Button";
 const Header = ({
   country,
   countries,
-  leagues,
   setCountry,
-  setActiveLeagueId,
   handleReset,
   location,
   loading,
@@ -18,17 +16,12 @@ const Header = ({
   function handleCountryChange(e) {
     const countryName = e.target.value;
 
-    setCountry(e.target.value);
-    handleReset();
-    
     props.history.push({
       pathname: "/matches",
       search: `?country=${countryName}`
     });
-  }
 
-  function handleLeagueChange(e) {
-    setActiveLeagueId(e.target.value);
+    setCountry(e.target.value);
   }
 
   return (
@@ -57,22 +50,6 @@ const Header = ({
             </option>
           ))}
         </select>{" "}
-        <select
-          name="leagueSelect"
-          disabled={loading}
-          onChange={handleLeagueChange}
-          value={"default"}
-        >
-          <option value="default" disabled>
-            Select a league
-          </option>
-
-          {leagues?.map((league, i) => (
-            <option key={`league-${i}`} value={league.id}>
-              {league.name}
-            </option>
-          ))}
-        </select>
       </section>
 
       <section>

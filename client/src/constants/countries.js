@@ -1,31 +1,38 @@
 export default {
-  en: {
+  england: {
     name: "england",
     altName: "united kingdom",
-    code: "gb-eng"
+    code: "gb-eng",
+    leagueId: 2021
   },
-  es: {
+  spain: {
     name: "spain",
-    code: "es"
+    code: "es",
+    leagueId: 2014
   },
-  de: {
+  germany: {
     name: "germany",
-    code: "de"
+    code: "de",
+    leagueId: 2002
   },
-  it: {
+  italy: {
     name: "italy",
-    code: "it"
+    code: "it",
+    leagueId: 2019
   },
-  fr: {
+  france: {
     name: "france",
-    code: "fr"
+    code: "fr",
+    leagueId: 2015
   },
-  pt: {
+  portugal: {
     name: "portugal",
-    code: "pt"
+    code: "pt",
+    leagueId: 2017
   },
-  nl: {
+  netherlands: {
     name: "netherlands",
-    code: "nl"
-  },
+    code: "nl",
+    leagueId: 2003
+  }
 };

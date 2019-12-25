@@ -4,8 +4,8 @@ import Radium from "radium";
 import Tabs from "../Tabs";
 import MatchdayCarousel from "../MatchdayCarousel";
 
-function Analytics({ standings, allMatches, activeLeagueData, activeClubId }) {
-  const { name = "", currentSeason = "" } = activeLeagueData || {};
+function Analytics({ standings, allMatches, leagueData, activeClubId }) {
+  const { name = "", currentSeason = "" } = leagueData || {};
   const { currentMatchday } = currentSeason;
   const tabs = [
     {
