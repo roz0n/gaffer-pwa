@@ -41,7 +41,7 @@ function Analytics({
       {country && activeClubId && season ? (
         <article style={style.container}>
           <div style={[style.gridItem, style.gridContent]}>
-            <span style={{ borderBottom: "1px solid red" }}>
+            <span style={{ borderBottom: "2px solid #E0EDFF" }}>
               <MatchdayCarousel
                 standings={standings}
                 allMatches={allMatches}
@@ -86,11 +86,12 @@ const style = {
   },
   gridContent: {
     padding: "4rem",
-    backgroundColor: "cyan"
+    borderRight: "1px solid rgb(224, 237, 255)"
+    // backgroundColor: "cyan"
   },
   sidebar: {
     padding: "0 2.5rem",
-    backgroundColor: "purple"
+    // backgroundColor: "purple"
   }
 };
 

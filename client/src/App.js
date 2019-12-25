@@ -1,5 +1,7 @@
 import React from "react";
+import { StyleRoot } from "radium";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { ThemeContext } from "./context/theme.context";
 // Components
 import { WorldView } from "./views/WorldView";
 import { MatchView } from "./views/MatchView";
@@ -15,9 +17,13 @@ function Routes() {
 
 function App() {
   return (
-    <Router>
-      <Routes />
-    </Router>
+    <StyleRoot>
+      <ThemeContext.Provider value={"test"}>
+        <Router>
+          <Routes />
+        </Router>
+      </ThemeContext.Provider>
+    </StyleRoot>
   );
 }
 

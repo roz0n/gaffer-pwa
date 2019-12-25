@@ -1,24 +1,29 @@
 import React, { useState } from "react";
 import Radium from "radium";
+import { ThemeContext } from "../../context/theme.context";
 // Components
 import Logo from "../../components/Logo";
 import ContinentMap from "../../components/ContinentMap";
 
-const World = Radium(() => {
+const World = Radium(props => {
   const [content, setContent] = useState("");
 
   return (
-    <div style={styles.container}>
-      <article style={styles.header}>
-        <Logo />
-      </article>
+    <ThemeContext.Consumer>
+      {theme => (
+        <div style={styles.container}>
+          <article style={styles.header}>
+            <Logo />
+          </article>
 
-      <ContinentMap
-        tipContent={content}
-        setTooltipContent={setContent}
-        style={{ height: "100%", width: "100%" }}
-      />
-    </div>
+          <ContinentMap
+            tipContent={content}
+            setTooltipContent={setContent}
+            style={{ height: "100%", width: "100%" }}
+          />
+        </div>
+      )}
+    </ThemeContext.Consumer>
   );
 });
 

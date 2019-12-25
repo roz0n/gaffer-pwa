@@ -134,7 +134,6 @@ const ContinentMap = ({ tipContent, setTooltipContent, style }) => {
                         key={geo.rsmKey}
                         geography={geo}
                         fill="rgba(64,64,64, 0.25)"
-                        // stroke="rgba(64,64,64, 0.25)"
                         style={{ strokeLocation: "inside" }}
                       />
                     );

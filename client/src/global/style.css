@@ -22,6 +22,19 @@ code {
     monospace;
 }
 
+/* .rsm-graticule {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash 1.5s linear forwards;
+}
+
+@keyframes dash {
+  to {
+    stroke-dasharray: 0;
+    stroke-dashoffset: 0;
+  }
+} */
+
 /* Reset */
 /* Box sizing rules */
 *,
