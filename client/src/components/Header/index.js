@@ -8,6 +8,7 @@ const Header = ({
   country,
   countries,
   setCountry,
+  handleSettingsView,
   handleReset,
   location,
   loading,
@@ -50,7 +51,7 @@ const Header = ({
               {country.name}
             </option>
           ))}
-        </select>{" "}
+        </select>
       </section>
 
       <section>
@@ -59,9 +60,9 @@ const Header = ({
             <Button icon={"close"} />
           </Link>
         ) : (
-          <Link to="/settings">
-            <Button icon={"settings"} />
-          </Link>
+          <span>
+            <Button icon={"settings"} onClick={(e) => handleSettingsView(e)} />
+          </span>
         )}
       </section>
     </nav>

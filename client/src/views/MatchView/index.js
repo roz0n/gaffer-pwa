@@ -9,7 +9,6 @@ import Analytics from "../../components/Analytics";
 import Header from "../../components/Header";
 import Standings from "../../components/Standings";
 import EmptyContent from "../../components/EmptyContent";
-import Footer from "../../components/Footer";
 // Utils
 import COUNTRIES from "../../constants/countries";
 import {
@@ -24,6 +23,8 @@ function Match(props) {
   const params = queryString.parse(location.search);
   const { country: countryParam } = params;
   const countryData = COUNTRIES[countryParam];
+  // TODO: This can be named better
+  const [settingsView, setSettingsView] = useState(false);
 
   // Semi-persistent data
   const [country, setCountry] = useState(null);
@@ -45,6 +46,10 @@ function Match(props) {
     setMatches(null);
     setActiveClubId(null);
     setError(false);
+  }
+
+  function toggleSettingsView() {
+    setSettingsView(!settingsView);
   }
 
   // Handle initial load and routing
@@ -116,39 +121,46 @@ function Match(props) {
         countries={Object.values(COUNTRIES)}
         country={country}
         setCountry={setCountry}
+        handleSettingsView={toggleSettingsView}
         handleReset={handleReset}
         loading={loading}
       />
 
-      <div style={style.body}>
-        {league && !loading && (
-          <section style={{ height: "100%" }}>
-            <div style={{ height: "inherit" }}>
-              <Standings standings={standings} handleClick={setActiveClubId} />
-              <Analytics
-                country={country}
-                standings={standings} // TODO: Standings should be a map
-                allMatches={matches}
-                leagueData={league}
-                activeClubId={activeClubId}
-              />
-            </div>
-          </section>
+      <div style={{ width: "100%", display: "flex", flexDirection: "row" }}>
+        {standings && !settingsView && (
+          <Standings standings={standings} handleClick={setActiveClubId} />
         )}
 
-        {loading && <EmptyContent message={"Preparing tactics..."} />}
+        <div style={style.body}>
+          {league && !loading && !settingsView && (
+            <section style={{ height: "100%" }}>
+              <div style={{ height: "inherit" }}>
+                <Analytics
+                  country={country}
+                  standings={standings} // TODO: Standings should be a map
+                  allMatches={matches}
+                  leagueData={league}
+                  activeClubId={activeClubId}
+                />
+              </div>
+            </section>
+          )}
 
-        {!league && !loading && (
-          <EmptyContent message={"Select a club from the left menu"} />
-        )}
+          {settingsView && <SettingsView />}
 
-        {error && (
-          <EmptyContent message={"There was an error loading the data"}>
-            <button onClick={() => handleReset()}>Try again?</button>
-          </EmptyContent>
-        )}
+          {loading && <EmptyContent message={"Preparing tactics..."} />}
+
+          {!league && !loading && (
+            <EmptyContent message={"Select a club from the left menu"} />
+          )}
+
+          {error && (
+            <EmptyContent message={"There was an error loading the data"}>
+              <button onClick={() => handleReset()}>Try again?</button>
+            </EmptyContent>
+          )}
+        </div>
       </div>
-      <Footer />
     </Layout>
   );
 }
@@ -158,7 +170,8 @@ const style = {
     display: "flex",
     justifyContent: "space-between",
     flexDirection: "column",
-    height: "100vh"
+    height: "100vh",
+    width: "100%"
   },
   content: {
     display: "flex",

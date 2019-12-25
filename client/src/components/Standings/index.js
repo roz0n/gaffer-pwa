@@ -29,14 +29,15 @@ const Standings = ({ standings, handleClick }) => {
 const styles = {
   layout: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
-    overflowX: "auto",
     listStyleType: "none",
     paddingLeft: 0,
     margin: 0,
     scrollbarWidth: "thin",
-    scrollbarColor: "#4594FF #F5F9FF"
+    scrollbarColor: "#4594FF #F5F9FF",
+    overflow: "auto",
+    height: "calc(100vh - 40px)"
   },
   size: {},
   theme: {}

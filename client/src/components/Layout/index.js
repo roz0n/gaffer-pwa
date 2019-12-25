@@ -5,7 +5,9 @@ const Layout = ({ type = "fullscreen", children }) => {
     fullscreen: {
       minHeight: "100vh",
       maxWidth: "100vw",
-      overflowX: "hidden"
+      overflow: "hidden",
+      display: "flex",
+      flexDirection: "column"
     }
   };
 
