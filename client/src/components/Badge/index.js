@@ -34,7 +34,7 @@ const styles = {
       alignItems: "center",
       overflow: "hidden",
       borderRadius: "100%",
-      margin: "1rem"
+      margin: ".25rem 1rem"
     },
     size: {
       maxHeight: "7.5rem",
@@ -43,8 +43,8 @@ const styles = {
       height: "7.5rem"
     },
     theme: {
-      backgroundColor: "#F5F9FF",
-      border: ".4rem solid #E0EDFF"
+      backgroundColor: "#1f1f1f",
+      // border: ".4rem solid #E0EDFF"
     }
   },
   badge: {

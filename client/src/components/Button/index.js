@@ -36,9 +36,9 @@ const styles = {
   },
   theme: {
     borderRadius: "100%",
-    border: "1px solid #E0EDFF",
+    border: "1px solid rgb(32, 32, 32)",
     backgroundColor: "unset",
-    color: "#509AFF",
+    color: "#FFFFFF",
     ":hover": {
       cursor: "pointer"
     }

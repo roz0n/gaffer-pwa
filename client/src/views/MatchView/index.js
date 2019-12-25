@@ -172,7 +172,9 @@ const style = {
     justifyContent: "space-between",
     flexDirection: "column",
     height: "100vh",
-    width: "100%"
+    width: "100%",
+    backgroundColor: "rgb(23, 23, 23)",
+    color: "#ffffff"
   },
   content: {
     display: "flex",

@@ -9,7 +9,7 @@ const Standings = ({ standings, handleClick }) => {
   }
 
   return (
-    <ol style={[styles.layout]}>
+    <ol style={Object.values(styles)}>
       {standings?.map((club, i) => (
         <li style={{ margin: "1.15rem 1rem" }} key={`standings-list-${i}`}>
           <Badge
@@ -35,12 +35,14 @@ const styles = {
     paddingLeft: 0,
     margin: 0,
     scrollbarWidth: "thin",
-    scrollbarColor: "#4594FF #F5F9FF",
+    scrollbarColor: "rgb(32, 32, 32) rgb(47, 47, 47)",
     overflow: "auto",
     height: "calc(100vh - 40px)"
   },
   size: {},
-  theme: {}
+  theme: {
+    backgroundColor: "#141414"
+  }
 };
 
 export default Radium(Standings);

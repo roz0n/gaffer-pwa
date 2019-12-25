@@ -82,7 +82,8 @@ const styles = {
     width: "100%"
   },
   theme: {
-    borderBottom: "1px solid #E0EDFF"
+    backgroundColor: "#141414",
+    borderBottom: "1px solid #181818"
   }
 };
 

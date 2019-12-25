@@ -26,12 +26,12 @@ const styles = {
     height: "1.5rem"
   },
   theme: {
-    backgroundColor: "#4594FF",
+    backgroundColor: "#55FF70",
     borderRadius: "100%",
     fontSize: "1rem",
     fontWeight: "bold",
     letterSpacing: "-.1rem",
-    color: "#ffffff"
+    color: "#141414"
   }
 };
 export default Radium(NumberLabel);
