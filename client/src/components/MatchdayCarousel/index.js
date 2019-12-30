@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Radium from "radium";
+// Utils
+import { fetchSingleMatch } from "../../data/api";
 // Components
 import Badge from "../Badge";
 import Button from "../Button";
@@ -18,13 +20,18 @@ const MatchdayCarousel = ({
   allMatches,
   activeLeagueName,
   activeClubId,
-  currentMatchday = ""
+  currentMatchday = 1
 }) => {
-  const [activeMatchday, setActiveMatchday] = useState();
   const activeClubMatches = allMatches.filter(
     match =>
-      match.homeTeam.id === activeClubId || match.awayTeam.id === activeClubId
+      match.homeTeam.id === activeClubId ||
+      match.awayTeam.id === activeClubId
   );
+
+  const [activeMatchday, setActiveMatchday] = useState();
+  const [ activeMatchDetails, setActiveMatchDetails ] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   // TODO: Do we need this loop here as well?
   const matchdayMatch = activeClubMatches.find(match => {
@@ -36,11 +43,13 @@ const MatchdayCarousel = ({
   // Standings just needs more data processing (set position property, and create separate clubs map)
   // Then we won't need to loop here
   const homeTeamData = standings.find(
-    team => team.id === matchdayMatch.homeTeam?.id
+    team =>
+      team.id === matchdayMatch.homeTeam?.id
   );
 
   const awayTeamData = standings.find(
-    team => team.id === matchdayMatch.awayTeam?.id
+    team =>
+      team.id === matchdayMatch.awayTeam?.id
   );
 
   function handleActiveMatchday(e, type) {
@@ -57,6 +66,26 @@ const MatchdayCarousel = ({
         break;
     }
   }
+
+  console.log("matchdayMatch", matchdayMatch);
+
+  useEffect(() => {
+    async function getMatchData() {
+      try {
+        const request = await fetchSingleMatch(matchdayMatch.id);
+
+        if (request.success) {
+          setActiveMatchDetails(request.data);
+        } else {
+          throw new Error();
+        }
+      } catch(error) {
+        setError(true);
+      }
+    }
+
+    getMatchData();
+  }, [activeMatchday]);
 
   return (
     <article style={styles.container.layout}>

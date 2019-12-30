@@ -1,0 +1,23 @@
+{
+  "name": "gaffer-pwa",
+  "version": "1.0.0",
+  "description": "football data and stuff",
+  "main": "./server/app.js",
+  "scripts": {
+    "start": "echo EROR",
+    "client": "cd client && npm start",
+    "server": "cd server && npm start",
+    "prod": "(cd client && npm build) & cd server & npm start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roz0n/gaffer-pwa.git"
+  },
+  "author": "Arnaldo Rozon",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/roz0n/gaffer-pwa/issues"
+  },
+  "homepage": "https://github.com/roz0n/gaffer-pwa#readme"
+}
