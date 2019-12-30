@@ -9,7 +9,7 @@ export async function fetchLeaguesByCountry(country) {
 }
 
 export async function fetchLeagueById(id) {
-  return await clientFetch(`/matches/${id}`).then(res => res.json());
+  return await clientFetch(`/matches/league/${id}`).then(res => res.json());
 }
 
 export async function fetchLeagueStandings(id) {
@@ -25,5 +25,5 @@ export async function fetchMapData() {
 }
 
 export async function fetchSingleMatch(id) {
-  return await clientFetch(`/match/${id}`).then(res => res.json());
+  return await clientFetch(`/matches/${id}`).then(res => res.json());
 }

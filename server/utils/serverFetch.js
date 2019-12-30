@@ -7,7 +7,8 @@ function serverFetch(endpoint, id = "", method = "GET") {
     competitions: () => "competitions/",
     leagues: id => `competitions/${id}/matches`,
     clubs: id => `competitions/${id}/teams`,
-    standings: id => `competitions/${id}/standings`
+    standings: id => `competitions/${id}/standings`,
+    match: id => `matches/${id}`
   };
   const options = {
     headers: {

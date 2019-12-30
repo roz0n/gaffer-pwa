@@ -72,6 +72,7 @@ const MatchdayCarousel = ({
   useEffect(() => {
     async function getMatchData() {
       try {
+        setLoading(true);
         const request = await fetchSingleMatch(matchdayMatch.id);
 
         if (request.success) {
@@ -81,6 +82,8 @@ const MatchdayCarousel = ({
         }
       } catch(error) {
         setError(true);
+      } finally {
+        setLoading(false);
       }
     }
 
